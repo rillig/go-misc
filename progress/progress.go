@@ -1,4 +1,4 @@
-package misc
+package progress
 
 // ProgressPercentage calculates the percentage that should be shown in
 // a progress bar when k of n work items are done.

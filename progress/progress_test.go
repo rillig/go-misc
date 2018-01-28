@@ -1,4 +1,4 @@
-package misc
+package progress
 
 import "testing"
 
