@@ -27,7 +27,7 @@ func main() {
 	lines := strings.SplitAfter(string(text), "\n")
 	var del, add int
 	for _, line := range lines {
-		if del + add > 0 {
+		if del+add > 0 {
 			if line == "" {
 				line = " "
 			}
