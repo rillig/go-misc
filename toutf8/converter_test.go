@@ -6,80 +6,80 @@ import (
 	"testing"
 )
 
-func TestUtf8Writer_Write_empty(t *testing.T) {
+func TestUtf8Writer_empty(t *testing.T) {
 	testWrite(t, "", "")
 }
 
-func TestUtf8Writer_Write_ASCII(t *testing.T) {
+func TestUtf8Writer_1(t *testing.T) {
 	testWrite(t, "hello", "hello")
 }
 
-func TestUtf8Writer_Write_Latin1(t *testing.T) {
+func TestUtf8Writer_1_invalid(t *testing.T) {
 	testWrite(t, "\xFC", "ü")
 }
 
-func TestUtf8Writer_Write_UTF8_2(t *testing.T) {
-	testWrite(t, "\xC3\xBC", "ü")
-}
-
-func TestUtf8Writer_Write_UTF8_3(t *testing.T) {
-	testWrite(t, "\xE2\x82\xAC", "€")
-}
-
-func TestUtf8Writer_Write_UTF8_4(t *testing.T) {
-	testWrite(t, "\xF0\x9D\x84\x9E", "𝄞")
-}
-
-func TestUtf8Writer_Write_mixed(t *testing.T) {
-	testWrite(t, "Ä\xC4ö\xF6ü\xFC", "ÄÄööüü")
-}
-
-func TestUtf8Writer_Write_incomplete_2(t *testing.T) {
+func TestUtf8Writer_2_incomplete(t *testing.T) {
 	testWrite(t, "\xC3", "\u00C3")
 }
 
-func TestUtf8Writer_Write_incomplete_3_1(t *testing.T) {
+func TestUtf8Writer_2_UTF8(t *testing.T) {
+	testWrite(t, "\xC3\xBC", "ü")
+}
+
+func TestUtf8Writer_3_incomplete_1(t *testing.T) {
 	testWrite(t, "\xE2", "\u00E2")
 }
 
-func TestUtf8Writer_Write_invalid_3_1(t *testing.T) {
-	testWrite(t, "\xE2\xE2", "\u00E2\u00E2")
-}
-
-func TestUtf8Writer_Write_invalid_3_2(t *testing.T) {
-	testWrite(t, "\xE2\xBF\xE2", "\u00E2\u00BF\u00E2")
-}
-
-func TestUtf8Writer_Write_incomplete_3_2(t *testing.T) {
+func TestUtf8Writer_3_incomplete_2(t *testing.T) {
 	testWrite(t, "\xE2\x82", "\u00E2\u0082")
 }
 
-func TestUtf8Writer_Write_incomplete_4_1(t *testing.T) {
+func TestUtf8Writer_3_UTF8(t *testing.T) {
+	testWrite(t, "\xE2\x82\xAC", "€")
+}
+
+func TestUtf8Writer_3_invalid_1(t *testing.T) {
+	testWrite(t, "\xE2\xE2", "\u00E2\u00E2")
+}
+
+func TestUtf8Writer_3_invalid_2(t *testing.T) {
+	testWrite(t, "\xE2\xBF\xE2", "\u00E2\u00BF\u00E2")
+}
+
+func TestUtf8Writer_4_incomplete_1(t *testing.T) {
 	testWrite(t, "\xF0", "\u00F0")
 }
 
-func TestUtf8Writer_Write_incomplete_4_2(t *testing.T) {
+func TestUtf8Writer_4_incomplete_2(t *testing.T) {
 	testWrite(t, "\xF0\x9D", "\u00F0\u009D")
 }
 
-func TestUtf8Writer_Write_incomplete_4_3(t *testing.T) {
+func TestUtf8Writer_4_incomplete_3(t *testing.T) {
 	testWrite(t, "\xF0\x9D\x84", "\u00F0\u009D\u0084")
 	// XXX: U+0084 is not assigned; but there is no unicode.IsAssigned(rune)
 }
 
-func TestUtf8Writer_Write_invalid_4_1(t *testing.T) {
+func TestUtf8Writer_4_UTF8(t *testing.T) {
+	testWrite(t, "\xF0\x9D\x84\x9E", "𝄞")
+}
+
+func TestUtf8Writer_4_invalid_1(t *testing.T) {
 	testWrite(t, "\xF0\xFF\x84\x9E", "\u00F0\u00FF\u0084\u009E")
 }
 
-func TestUtf8Writer_Write_invalid_4_2(t *testing.T) {
+func TestUtf8Writer_4_invalid_2(t *testing.T) {
 	testWrite(t, "\xF0\x9D\xFF\x9E", "\u00F0\u009D\u00FF\u009E")
 }
 
-func TestUtf8Writer_Write_invalid_4_3(t *testing.T) {
+func TestUtf8Writer_4_invalid_3(t *testing.T) {
 	testWrite(t, "\xF0\x9D\x84\xFF", "\u00F0\u009D\u0084\u00FF")
 }
 
-func TestUtf8Writer_Write_FF(t *testing.T) {
+func TestUtf8Writer_mixed(t *testing.T) {
+	testWrite(t, "Ä\xC4ö\xF6ü\xFC", "ÄÄööüü")
+}
+
+func TestUtf8Writer_FF(t *testing.T) {
 	testWrite(t, "\xFF\xFF\xFF\xFF\xFF", "\u00FF\u00FF\u00FF\u00FF\u00FF")
 }
 
@@ -105,7 +105,7 @@ func (wr *noSpaceWriter) Write(b []byte) (int, error) {
 	return n, err
 }
 
-func TestUtf8Writer_Write_error(t *testing.T) {
+func TestUtf8Writer_error(t *testing.T) {
 	input := "hello"
 	output := "hel" // truncated to 3 bytes because of the noSpaceWriter
 
