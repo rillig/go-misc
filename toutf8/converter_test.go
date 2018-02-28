@@ -46,6 +46,13 @@ func TestUtf8Writer_3_invalid_2(t *testing.T) {
 	testWrite(t, "\xE2\xBF\xE2", "\u00E2\u00BF\u00E2")
 }
 
+func TestUtf8Writer_3_invalid_surrogates(t *testing.T) {
+	testWrite(t, "\xED\x9F\xBF", "\uD7FF")
+	testWrite(t, "\xED\xA0\x80", "\u00ED\u00A0\u0080")
+	testWrite(t, "\xED\xBF\xBF", "\u00ED\u00BF\u00BF")
+	testWrite(t, "\xEE\x80\x80", "\uE000")
+}
+
 func TestUtf8Writer_4_incomplete_1(t *testing.T) {
 	testWrite(t, "\xF0", "\u00F0")
 }
